@@ -1,4 +1,4 @@
-## monolith project for ShadowRoot
+## monolith project for soho
 
 ### before start please follow this steps;
 
