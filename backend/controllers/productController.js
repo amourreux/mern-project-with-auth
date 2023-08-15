@@ -104,10 +104,43 @@ const deleteProduct = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Create new movement
+// @route   POST /api/products/:id/movements
+// @access  Private
+const createProductMovement = asyncHandler(async (req, res) => {
+  const { description, inOrOutCount } = req.body;
+
+  const product = await Product.findById(req.params.id);
+
+  if (inOrOutCount < 0 && Math.abs(inOrOutCount) > product.countInStock) {
+    throw new Error('Invalid movement. Not enough stocks to remove.');
+  }
+
+  if (product) {
+    const movement = {
+      description,
+      inOrOutCount,
+    };
+
+    product.movements.push(movement);
+    product.countInStock = product.movements.reduce(
+      (acc, item) => item.inOrOutCount + acc,
+      0
+    );
+
+    await product.save();
+    res.status(201).json({ message: 'Movement added' });
+  } else {
+    res.status(404);
+    throw new Error('Product not found');
+  }
+});
+
 export {
   getProducts,
   getProductById,
   createProduct,
   updateProduct,
   deleteProduct,
+  createProductMovement,
 };

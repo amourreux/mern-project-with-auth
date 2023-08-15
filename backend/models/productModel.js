@@ -1,5 +1,15 @@
 import mongoose from 'mongoose';
 
+const movementSchema = mongoose.Schema(
+  {
+    description: { type: String, required: true },
+    inOrOutCount: { type: Number, required: true },
+  },
+  {
+    timestamps: true,
+  }
+);
+
 const productSchema = mongoose.Schema(
   {
     name: {
@@ -19,6 +29,7 @@ const productSchema = mongoose.Schema(
       required: true,
       default: 0,
     },
+    movements: [movementSchema],
   },
   {
     timestamps: true,

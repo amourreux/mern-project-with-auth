@@ -108,6 +108,40 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "createProductMovement",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "inOrOutCount",
+							"value": "10",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "increment on stock",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseURL}}/products/64db9581c0c78b79556ba91c/movements",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"products",
+						"64db9581c0c78b79556ba91c",
+						"movements"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
