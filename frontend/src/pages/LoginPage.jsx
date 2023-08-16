@@ -1,17 +1,49 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import FormContainer from '../components/FormContainer';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLoginMutation } from '../store/slices/usersApiSlice';
+import { setCredentials } from '../store/slices/authSlice';
+import { toast } from 'react-toastify';
+import Loader from '../components/Loader';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [login, { isLoading }] = useLoginMutation();
+
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const redirect = '/products';
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate(redirect);
+    }
+  }, [navigate, redirect, userInfo]);
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await login({ email, password }).unwrap();
+      dispatch(setCredentials({ ...res }));
+      navigate(redirect);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
+
   return (
     <FormContainer>
       <h1>Sign In</h1>
 
-      <Form onSubmit={() => console.log('ph')}>
+      <Form onSubmit={submitHandler}>
         <Form.Group className='my-2' controlId='email'>
           <Form.Label>Email Address</Form.Label>
           <Form.Control
@@ -32,9 +64,11 @@ const LoginPage = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Button type='submit' variant='primary'>
+        <Button disabled={isLoading} type='submit' variant='primary'>
           Sign In
         </Button>
+
+        {isLoading && <Loader />}
       </Form>
     </FormContainer>
   );
