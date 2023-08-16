@@ -12,7 +12,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import LoginPage from './pages/LoginPage';
-import ProductsPage from './pages/ProductPage';
+import ProductsPage from './pages/ProductsPage';
 import PrivateRoute from './components/PrivateRoute';
 import store from './store/store';
 
