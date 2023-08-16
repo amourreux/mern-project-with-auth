@@ -137,7 +137,7 @@ const ProductsPage = () => {
               <Form.Label>Name</Form.Label>
               <Form.Control
                 type='name'
-                placeholder='Name of Product'
+                placeholder='Enter name'
                 defaultValue={name}
                 onChange={(e) => setName(e.target.value)}
                 autoFocus
@@ -149,7 +149,7 @@ const ProductsPage = () => {
                 type='name'
                 defaultValue={code}
                 onChange={(e) => setCode(e.target.value)}
-                placeholder='Code of Product'
+                placeholder='Enter code'
                 autoFocus
               />
             </Form.Group>
@@ -160,6 +160,7 @@ const ProductsPage = () => {
                 min='0'
                 autoFocus
                 defaultValue={countInStock}
+                placeholder='Enter Current Stock'
                 onChange={(e) => setCountInStock(e.target.value)}
               />
             </Form.Group>
@@ -168,6 +169,7 @@ const ProductsPage = () => {
               <Form.Control
                 as='textarea'
                 rows={3}
+                placeholder='Enter description'
                 defaultValue={description}
                 onChange={(e) => setDescription(e.target.value)}
               />

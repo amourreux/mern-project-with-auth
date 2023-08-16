@@ -15,6 +15,7 @@ import LoginPage from './pages/LoginPage';
 import ProductsPage from './pages/ProductsPage';
 import PrivateRoute from './components/PrivateRoute';
 import store from './store/store';
+import ProductEditPage from './pages/ProductEditPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const router = createBrowserRouter(
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
       <Route index={true} path='/' element={<LoginPage />}></Route>
       <Route path='' element={<PrivateRoute />}>
         <Route path='/products' element={<ProductsPage />} />
+        <Route path='/admin/product/:id/edit' element={<ProductEditPage />} />
       </Route>
     </Route>
   )
