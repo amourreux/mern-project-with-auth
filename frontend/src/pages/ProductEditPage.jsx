@@ -1,9 +1,10 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Form, Button, Alert } from 'react-bootstrap';
+import { Form, Button, Alert, Table, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import {
+  useCreateMovementMutation,
   useGetProductDetailsQuery,
   useUpdateProductMutation,
 } from '../store/slices/productsApiSlice';
@@ -13,10 +14,45 @@ import FormContainer from '../components/FormContainer';
 const ProductEditPage = () => {
   const { id: productId } = useParams();
 
+  const [showModal, setShowModal] = useState(false);
+
   const [name, setName] = useState('');
   const [code, setCode] = useState('');
   const [description, setDescription] = useState('');
   const [countInStock, setCountInStock] = useState(0);
+  const [movements, setMovements] = useState([]);
+
+  const [movDescription, setMovDescription] = useState('');
+  const [inOrOutCount, setInOrOutCount] = useState(0);
+
+  const [createMovement] = useCreateMovementMutation();
+
+  const createMovementHandler = async () => {
+    try {
+      await createMovement({
+        productId,
+        description: movDescription,
+        inOrOutCount,
+      }).unwrap();
+      refetch();
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    } finally {
+      handleClose();
+    }
+  };
+
+  const handleClose = () => {
+    setShowModal(false);
+    setMovDescription('');
+    setInOrOutCount('');
+  };
+
+  const handleShow = () => {
+    setShowModal(true);
+    setMovDescription('');
+    setInOrOutCount('');
+  };
 
   const {
     data: product,
@@ -31,6 +67,7 @@ const ProductEditPage = () => {
       setCode(product.code);
       setDescription(product.description);
       setCountInStock(product.countInStock);
+      setMovements(product.movements);
     }
   }, [product]);
 
@@ -117,6 +154,71 @@ const ProductEditPage = () => {
           </Form>
         )}
       </FormContainer>
+      <hr></hr>
+      <Button
+        onClick={handleShow}
+        type='button'
+        variant='secondary'
+        style={{ marginTop: '1rem' }}
+      >
+        Add Movement
+      </Button>
+      <hr />
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Movement Description</th>
+            <th>Change in stock</th>
+          </tr>
+        </thead>
+        <tbody>
+          {movements.map((move, index) => (
+            <tr key={move._id}>
+              <td>{index + 1}</td>
+              <td>{move.description}</td>
+              <td>{move.inOrOutCount}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+
+      <Modal show={showModal} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add stock movement</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className='mb-3' controlId='movement.inOrOutCount'>
+              <Form.Label>In/Out</Form.Label>
+              <Form.Control
+                defaultValue={inOrOutCount}
+                onChange={(e) => setInOrOutCount(e.target.value)}
+                type='number'
+                min={-countInStock}
+                autoFocus
+              />
+            </Form.Group>
+            <Form.Group className='mb-3' controlId='movement.description'>
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                defaultValue={movDescription}
+                onChange={(e) => setMovDescription(e.target.value)}
+                as='textarea'
+                rows={3}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='secondary' onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant='primary' onClick={createMovementHandler}>
+            Add Movement
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

@@ -159,6 +159,7 @@ const ProductsPage = () => {
                 type='number'
                 min='0'
                 autoFocus
+                readOnly
                 defaultValue={countInStock}
                 placeholder='Enter Current Stock'
                 onChange={(e) => setCountInStock(e.target.value)}
