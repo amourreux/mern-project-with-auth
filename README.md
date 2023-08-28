@@ -1,4 +1,4 @@
-## monolith project for soho
+## monolith mern project
 
 ### before start please follow this steps;
 
