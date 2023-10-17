@@ -122,8 +122,8 @@ const ProductEditPage = () => {
               <Form.Control
                 type='code'
                 placeholder='Enter code'
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
               ></Form.Control>
             </Form.Group>
             <Form.Group controlId='description'>
