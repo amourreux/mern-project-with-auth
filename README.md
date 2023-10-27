@@ -9,4 +9,10 @@
 - `npm install` in root folder to install both frontend and backend packages
 - run `npm run dev` script to run both frontend backend apps.
 
+### start docker on development mode
+
+- use this script
+```bash
+npm run docker-dev
+```
 
